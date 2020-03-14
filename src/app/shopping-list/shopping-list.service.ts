@@ -19,7 +19,7 @@ export class ShoppingListService {
         this.ingredientChanged.emit(this.ingridients.slice());
     }
 
-    andIngredients(ingredients: Ingredient[]) {
+    addIngredients(ingredients: Ingredient[]) {
         // for (let ingredient of ingredients) {
         //     this.addIngredient(ingredient);
         // }
