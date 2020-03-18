@@ -5,26 +5,41 @@ import { Subject } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class ShoppingListService {
     ingredientChanged = new Subject<Ingredient[]>();
+    startEditing = new Subject<number>();
 
-    private ingridients: Ingredient[] = [
+    private ingredients: Ingredient[] = [
         new Ingredient('Apple', 5),
         new Ingredient('Tomato', 10)
     ];
 
     getIngredients(): Ingredient[] {
-        return this.ingridients.slice();
+        return this.ingredients.slice();
+    }
+
+    getIngredient(index: number): Ingredient {
+      return this.ingredients[index];
     }
 
     addIngredient(ingredient: Ingredient) {
-        this.ingridients.push(ingredient);
-        this.ingredientChanged.next(this.ingridients.slice());
+        this.ingredients.push(ingredient);
+        this.ingredientChanged.next(this.ingredients.slice());
     }
 
     addIngredients(ingredients: Ingredient[]) {
         // for (let ingredient of ingredients) {
         //     this.addIngredient(ingredient);
         // }
-        this.ingridients.push(...ingredients);
-        this.ingredientChanged.next(this.ingridients.slice());
+        this.ingredients.push(...ingredients);
+        this.ingredientChanged.next(this.ingredients.slice());
+    }
+
+    updateIngredient(index: number, newIngredient: Ingredient) {
+      this.ingredients[index] = newIngredient;
+      this.ingredientChanged.next(this.ingredients.slice());
+    }
+
+    deleteIngredient(index: number) {
+      this.ingredients.splice(index, 1);
+      this.ingredientChanged.next(this.ingredients.slice())
     }
 }
