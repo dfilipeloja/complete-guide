@@ -4,7 +4,7 @@
     <hr>
     <ul class="list-group">
       <a class="list-group-item" style="cursor: pointer;"
-        *ngFor="let ingredient of ingridients; let i = index"
+        *ngFor="let ingredient of (ingridients | async).ingredients; let i = index"
         (click)="onEditEditem(i)">{{ ingredient.name }} ({{ ingredient.amount }})</a>
     </ul>
   </div>
