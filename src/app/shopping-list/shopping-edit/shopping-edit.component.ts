@@ -20,19 +20,21 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit(): void {
-    this.subscription = this.store.select('shoppingList').subscribe(state => {
-      if (state.editedIngredientIndex > -1) {
-        this.editMode = true;
-        this.editedItem = state.editedIngredient;
+    this.subscription = this.store
+      .select('shoppingList')
+      .subscribe(stateData => {
+        const index = stateData.editIndex;
+        if (index > -1) {
+          this.editedItem = stateData.ingredients[index];
 
-        this.shoppingListForm.setValue({
-          name: this.editedItem.name,
-          amount: this.editedItem.amount
-        });
-      } else {
-        this.editMode = false;
-      }
-    });
+          this.shoppingListForm.setValue({
+            name: this.editedItem.name,
+            amount: this.editedItem.amount
+          });
+        } else {
+          this.editMode = false;
+        }
+      });
   }
 
   onSubmit(form: NgForm) {
@@ -45,11 +47,13 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
       //   newIngredient
       // );
       this.store.dispatch(
-        new ShoppingListActions.UpdateIngredient(newIngredient)
+        ShoppingListActions.updateIngredient({ ingredient: newIngredient })
       );
     } else {
       // this.shoppingListService.addIngredient(newIngredient);
-      this.store.dispatch(new ShoppingListActions.AddIngredient(newIngredient));
+      this.store.dispatch(
+        ShoppingListActions.addIngredient({ ingredient: newIngredient })
+      );
     }
 
     this.editMode = false;
@@ -58,18 +62,18 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
 
   onDelete() {
     // this.shoppingListService.deleteIngredient(this.editedItemIndex);
-    this.store.dispatch(new ShoppingListActions.DeleteIngredient());
+    this.store.dispatch(ShoppingListActions.deleteIngredient());
     this.onClear();
   }
 
   onClear() {
     this.shoppingListForm.reset();
     this.editMode = false;
-    this.store.dispatch(new ShoppingListActions.StopEdit());
+    this.store.dispatch(ShoppingListActions.stopEdit());
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-    this.store.dispatch(new ShoppingListActions.StopEdit());
+    this.store.dispatch(ShoppingListActions.stopEdit());
   }
 }

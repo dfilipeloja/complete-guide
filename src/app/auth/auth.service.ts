@@ -12,7 +12,7 @@ export class AuthService {
 
   setLogoutTimer(expirationDuration: number) {
     this.tokenExpirationTime = setTimeout(() => {
-      this.store.dispatch(new AuthActions.Logout());
+      this.store.dispatch(AuthActions.logout());
     }, expirationDuration);
   }
 
